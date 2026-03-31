@@ -35,26 +35,7 @@ variable "values_file" {
 }
 
 
-# variable "nlb_internal" {
-#   type = string
-#   default = ""
-# }
-
-# variable "nlb_target_type" {
-#   type = string
-#   default = ""
-# }
-
-# variable "nlb_private_ips" {
-#   type = list(string)
-#   default = []
-# }
-
-# variable "cross_zone_enabled" {
-#   type = string
-#   default = false
-# }
-# variable "external_traffic_policy" {
-#   type = string
-#   default = "Cluster"
-# }
+variable "values_override" {
+  type    = any
+  default = {}
+}

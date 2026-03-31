@@ -119,7 +119,7 @@ variable "aws_ccm_config" {
     chart            = string
     namespace        = string
     create_namespace = bool
-    values_file      = string
+    values_override   = any
   })
 }
 
@@ -131,6 +131,6 @@ variable "ingress_nginx_config" {
     chart            = string
     namespace        = string
     create_namespace = bool
-    values_file      = string
+    values_override   = any
   })
 }

@@ -102,19 +102,72 @@ aws_ccm_config = {
   chart            = "aws-cloud-controller-manager"
   namespace        = "kube-system"
   create_namespace = false
-  values_file      = "./modules/helm/values_ccm.yaml"
-}
 
+  values_override = {
+    namespace = "kube-system"
+
+    args = [
+      "--v=2",
+      "--cloud-provider=aws",
+      "--cluster-cidr=10.42.0.0/16"
+    ]
+
+    nodeSelector = {
+      "node-role.kubernetes.io/control-plane" = "true"
+    }
+  }
+}
+# aws_ccm_config = {
+#   release_name     = "aws-cloud-controller-manager"
+#   repository       = "https://kubernetes.github.io/cloud-provider-aws"
+#   chart            = "aws-cloud-controller-manager"
+#   namespace        = "kube-system"
+#   create_namespace = false
+#   values_file      = "./modules/helm/values_ccm.yaml"
+# }
+
+# ingress_nginx_config = {
+#   release_name            = "ingress-nginx"
+#   repository              = "https://kubernetes.github.io/ingress-nginx"
+#   chart                   = "ingress-nginx"
+#   namespace               = "ingress-nginx"
+#   create_namespace        = true
+#   values_file             = "./modules/helm/values.yaml"
+  
+# }
 ingress_nginx_config = {
-  release_name            = "ingress-nginx"
-  repository              = "https://kubernetes.github.io/ingress-nginx"
-  chart                   = "ingress-nginx"
-  namespace               = "ingress-nginx"
-  create_namespace        = true
-  values_file             = "./modules/helm/values.yaml"
-  nlb_internal            = "true"
-  nlb_target_type         = "ip"
-  nlb_private_ips         = ["10.0.0.150", "10.0.0.210"]
-  cross_zone_enabled      = "true"
-  external_traffic_policy = "Cluster"
+  release_name     = "ingress-nginx"
+  repository       = "https://kubernetes.github.io/ingress-nginx"
+  chart            = "ingress-nginx"
+  namespace        = "ingress-nginx"
+  create_namespace = true
+
+  values_override = {
+    controller = {
+      service = {
+        type = "LoadBalancer"
+
+        annotations = {
+          "service.beta.kubernetes.io/aws-load-balancer-type"                   = "nlb"
+          "service.beta.kubernetes.io/aws-load-balancer-internal"               = "true"
+          "service.beta.kubernetes.io/aws-load-balancer-nlb-target-type"        = "ip"
+          "service.beta.kubernetes.io/aws-load-balancer-private-ipv4-addresses" = "10.0.0.150,10.0.0.210"
+          "service.beta.kubernetes.io/aws-load-balancer-cross-zone-load-balancing-enabled" = "true"
+        }
+
+        externalTrafficPolicy = "Cluster"
+      }
+
+      ingressClassResource = {
+        name    = "nginx"
+        enabled = true
+        default = true
+      }
+
+      admissionWebhooks = {
+        enabled       = true
+        failurePolicy = "Ignore"
+      }
+    }
+  }
 }

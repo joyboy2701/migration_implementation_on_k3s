@@ -58,7 +58,9 @@ module "aws_ccm" {
   chart            = var.aws_ccm_config.chart
   namespace        = var.aws_ccm_config.namespace
   create_namespace = var.aws_ccm_config.create_namespace
-  values_file      = var.aws_ccm_config.values_file
+
+  values_override  = var.aws_ccm_config.values_override
+
   depends_on = [module.k3s_cluster]
 }
 module "helm_ingress" {
@@ -69,6 +71,8 @@ module "helm_ingress" {
   chart            = var.ingress_nginx_config.chart
   namespace        = var.ingress_nginx_config.namespace
   create_namespace = var.ingress_nginx_config.create_namespace
-  values_file      = var.ingress_nginx_config.values_file
-  depends_on = [module.k3s_cluster,module.aws_ccm]
+
+  values_override  = var.ingress_nginx_config.values_override
+
+  depends_on = [module.k3s_cluster, module.aws_ccm]
 }

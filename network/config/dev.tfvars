@@ -21,7 +21,6 @@ base_tags = {
 }
 aws_region = "us-east-2"
 bastion = {
-  ami_id                 = "ami-0c02fb55956c7d316"
   instance_type          = "t2.micro"
   user_data_file         = "./user_data.sh"
   bastion_sg_name        = "bastion-sg"

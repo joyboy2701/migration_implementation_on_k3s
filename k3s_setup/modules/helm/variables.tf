@@ -27,14 +27,6 @@ variable "create_namespace" {
   description = "Whether to create the namespace if it does not exist"
   default     = true
 }
-
-variable "values_file" {
-  type        = string
-  description = "Path to Helm values.yaml file"
-  default     = ""  # do not use ${path.module}
-}
-
-
 variable "values_override" {
   type    = any
   default = {}

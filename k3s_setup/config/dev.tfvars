@@ -1,17 +1,3 @@
-vpc = {
-  vpc_name                = "k3s-vpc"
-  vpc_cidr                = "10.0.0.0/24"
-  public_subnet_cidrs     = ["10.0.0.0/26", "10.0.0.64/26"]
-  private_subnet_cidrs    = ["10.0.0.128/26", "10.0.0.192/26"]
-  cidr_block              = "0.0.0.0/0"
-  domain                  = "vpc"
-  map_public_ip_on_launch = true
-  enable_dns_support      = true
-  dns_host_name           = true
-  tags = {
-    "kubernetes.io/cluster/k3s-cluster" = "shared"
-  }
-}
 base_tags = {
   Environment = "dev"
   ManagedBy   = "Terraform"
@@ -117,24 +103,6 @@ aws_ccm_config = {
     }
   }
 }
-# aws_ccm_config = {
-#   release_name     = "aws-cloud-controller-manager"
-#   repository       = "https://kubernetes.github.io/cloud-provider-aws"
-#   chart            = "aws-cloud-controller-manager"
-#   namespace        = "kube-system"
-#   create_namespace = false
-#   values_file      = "./modules/helm/values_ccm.yaml"
-# }
-
-# ingress_nginx_config = {
-#   release_name            = "ingress-nginx"
-#   repository              = "https://kubernetes.github.io/ingress-nginx"
-#   chart                   = "ingress-nginx"
-#   namespace               = "ingress-nginx"
-#   create_namespace        = true
-#   values_file             = "./modules/helm/values.yaml"
-  
-# }
 ingress_nginx_config = {
   release_name     = "ingress-nginx"
   repository       = "https://kubernetes.github.io/ingress-nginx"

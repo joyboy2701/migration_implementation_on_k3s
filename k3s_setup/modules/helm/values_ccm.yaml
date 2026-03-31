@@ -1,9 +1,0 @@
-namespace: "kube-system"
-
-args:
-  - --v=2
-  - --cloud-provider=aws
-  - --cluster-cidr=10.42.0.0/16
-
-nodeSelector:
-  node-role.kubernetes.io/control-plane: "true"

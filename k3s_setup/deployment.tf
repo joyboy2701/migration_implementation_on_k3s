@@ -1,12 +1,5 @@
-terraform {
-  required_providers {
-    kubectl = {
-      source  = "gavinbunney/kubectl"
-      version = "~> 1.19"
-    }
-  }
-}
 resource "kubectl_manifest" "nginx_deployment" {
+    depends_on = [ module.k3s_cluster , module.helm_ingress ]
   yaml_body = <<YAML
 apiVersion: apps/v1
 kind: Deployment
@@ -31,6 +24,7 @@ spec:
 YAML
 }
 resource "kubectl_manifest" "nginx_service" {
+     depends_on = [ module.k3s_cluster , module.helm_ingress ]
   yaml_body = <<YAML
 apiVersion: v1
 kind: Service
@@ -49,7 +43,7 @@ YAML
 }
 
 resource "kubectl_manifest" "nginx_ingress" {
-  depends_on = [kubectl_manifest.nginx_service]
+  depends_on = [kubectl_manifest.nginx_service,module.helm_ingress,module.k3s_cluster]
 
   yaml_body = <<YAML
 apiVersion: networking.k8s.io/v1

@@ -1,17 +1,3 @@
-
-# module "vpc" {
-#   source                  = "./modules/vpc"
-#   vpc_name                = var.vpc.vpc_name
-#   vpc_cidr                = var.vpc.vpc_cidr
-#   cidr_block              = var.vpc.cidr_block
-#   public_subnet_cidrs     = var.vpc.public_subnet_cidrs
-#   private_subnet_cidrs    = var.vpc.private_subnet_cidrs
-#   domain                  = var.vpc.domain
-#   map_public_ip_on_launch = var.vpc.map_public_ip_on_launch
-#   enable_dns_support      = var.vpc.enable_dns_support
-#   dns_host_name           = var.vpc.dns_host_name
-#   tags                    = merge(var.base_tags, var.vpc.tags)
-# }
 locals {
   master_ip =module.k3s_cluster.k3s_master_private_ip
 }
@@ -85,11 +71,4 @@ module "helm_ingress" {
   create_namespace = var.ingress_nginx_config.create_namespace
   values_file      = var.ingress_nginx_config.values_file
   depends_on = [module.k3s_cluster,module.aws_ccm]
-}
-module "deployment" {
-  source = "./modules/kubectl"
-  providers = {
-    kubectl = kubectl
-  }
-  depends_on = [module.k3s_cluster,module.helm_ingress]
 }

@@ -24,6 +24,16 @@
       "Resource": "*"
     },
     {
+      "Sid": "ParameterStore",
+      "Effect": "Allow",
+      "Action": [
+        "ssm:PutParameter",
+        "ssm:GetParameter",
+        "ssm:GetParameters"
+      ],
+      "Resource": "*"
+    },
+    {
       "Sid": "AutoScalingFullAccess",
       "Effect": "Allow",
       "Action": [

@@ -4,8 +4,9 @@ set -euxo pipefail
 # Log everything
 exec > >(tee /var/log/user-data.log|logger -t user-data ) 2>&1
 
-yum update -y
-yum install -y git unzip curl
+# Update package list and install dependencies (Ubuntu uses apt)
+apt-get update -y
+apt-get install -y git unzip curl
 
 # -------------------------------
 # Install AWS CLI v2
@@ -15,8 +16,8 @@ unzip -o /tmp/awscliv2.zip -d /tmp
 /tmp/aws/install --update
 rm -rf /tmp/awscliv2.zip /tmp/aws
 
-# Ensure PATH
-echo 'export PATH=/usr/local/bin:$PATH' >> /home/ec2-user/.bashrc
+# Ensure PATH (using ubuntu user instead of ec2-user)
+echo 'export PATH=/usr/local/bin:$PATH' >> /home/ubuntu/.bashrc
 export PATH=/usr/local/bin:$PATH
 
 # -------------------------------
@@ -37,14 +38,13 @@ curl -L -o /tmp/kubectl "https://dl.k8s.io/release/${KUBECTL_VERSION}/bin/linux/
 chmod +x /tmp/kubectl
 mv /tmp/kubectl /usr/local/bin/kubectl
 
-
 # Clone the repository (replace with your actual repo URL)
 GIT_REPO_URL="https://github.com/joyboy2701/migration_implementation_on_k3s.git"
-CLONE_DIR="/home/ec2-user/"
+CLONE_DIR="/home/ubuntu/"
 
 echo "=== Cloning Git Repository ==="
 git clone "$GIT_REPO_URL" "$CLONE_DIR/K3s"
-cd /home/ec2-user/K3s/k3s_setup
+cd /home/ubuntu/K3s/k3s_setup
 
 # Initialize Terraform
 echo "=== Initializing Terraform ==="
@@ -60,6 +60,5 @@ echo "=== Applying Terraform Configuration ==="
 terraform apply -var-file="config/dev.tfvars" -auto-approve
 
 set -e  # Re-enable exit on error for rest of script (if any)
-# ---------- END OF NO-TERMINATE SECTION ----------
 
 echo "=== User data completed ==="

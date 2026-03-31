@@ -12,6 +12,9 @@
 #   dns_host_name           = var.vpc.dns_host_name
 #   tags                    = merge(var.base_tags, var.vpc.tags)
 # }
+locals {
+  master_ip =module.k3s_cluster.k3s_master_private_ip
+}
 module "k3s_cluster" {
   source = "./modules/nodes"
 

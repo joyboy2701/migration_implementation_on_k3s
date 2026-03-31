@@ -29,8 +29,15 @@ data "aws_ssm_parameter" "k3s_kubeconfig" {
   with_decryption = true
   depends_on = [ module.k3s_cluster ]
 }
+locals {
+  kubeconfig_fixed = replace(
+    data.aws_ssm_parameter.k3s_kubeconfig.value,
+    "127.0.0.1",
+    local.master_ip
+  )
+}
 resource "local_file" "k3s_kubeconfig_file" {
-  content  = data.aws_ssm_parameter.k3s_kubeconfig.value
+  content  = local.kubeconfig_fixed
   filename = "${path.module}/k3s.yaml"
 }
 

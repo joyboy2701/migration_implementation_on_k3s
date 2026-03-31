@@ -1,31 +1,24 @@
-data "aws_ami" "ubuntu22" {
-  most_recent = true
-  owners      = ["099720109477"] 
-  filter {
-    name   = "name"
-    values = ["ubuntu/images/hvm-ssd/ubuntu-jammy-22.04-amd64-server-*"]
-  }
-}
-module "vpc" {
-  source                  = "./modules/vpc"
-  vpc_name                = var.vpc.vpc_name
-  vpc_cidr                = var.vpc.vpc_cidr
-  cidr_block              = var.vpc.cidr_block
-  public_subnet_cidrs     = var.vpc.public_subnet_cidrs
-  private_subnet_cidrs    = var.vpc.private_subnet_cidrs
-  domain                  = var.vpc.domain
-  map_public_ip_on_launch = var.vpc.map_public_ip_on_launch
-  enable_dns_support      = var.vpc.enable_dns_support
-  dns_host_name           = var.vpc.dns_host_name
-  tags                    = merge(var.base_tags, var.vpc.tags)
-}
+
+# module "vpc" {
+#   source                  = "./modules/vpc"
+#   vpc_name                = var.vpc.vpc_name
+#   vpc_cidr                = var.vpc.vpc_cidr
+#   cidr_block              = var.vpc.cidr_block
+#   public_subnet_cidrs     = var.vpc.public_subnet_cidrs
+#   private_subnet_cidrs    = var.vpc.private_subnet_cidrs
+#   domain                  = var.vpc.domain
+#   map_public_ip_on_launch = var.vpc.map_public_ip_on_launch
+#   enable_dns_support      = var.vpc.enable_dns_support
+#   dns_host_name           = var.vpc.dns_host_name
+#   tags                    = merge(var.base_tags, var.vpc.tags)
+# }
 module "k3s_cluster" {
   source = "./modules/nodes"
 
-  vpc_id                      = module.vpc.vpc_id
-  vpc_cidr                    = module.vpc.vpc_cidr
-  public_subnet_id            = module.vpc.public_subnet_ids[0]
-  private_subnet_id           = module.vpc.private_subnet_ids[0]
+  vpc_id                      = data.aws_vpc.existing.id
+  vpc_cidr                    = data.aws_vpc.existing.cidr_block
+  public_subnet_id            = data.aws_subnets.public.ids[0]
+  private_subnet_id           = data.aws_subnets.private.ids[0]
   iam_instance_profile_master = module.iam.node_iam_instance_profile_master
   iam_instance_profile_worker = module.iam.node_iam_instance_profile_worker
   ami_id                      = data.aws_ami.ubuntu22.id
@@ -52,8 +45,8 @@ module "load_balancer" {
   source = "./modules/load-balancer"
 
   name                       = var.load_balancer.name
-  vpc_id                     = module.vpc.vpc_id
-  subnet_ids                 = module.vpc.public_subnet_ids
+  vpc_id                     = data.aws_vpc.existing.id
+  subnet_ids                 = data.aws_subnets.public.ids
   load_balancer_type         = var.load_balancer.load_balancer_type
   internal                   = var.load_balancer.internal
   enable_deletion_protection = var.load_balancer.enable_deletion_protection

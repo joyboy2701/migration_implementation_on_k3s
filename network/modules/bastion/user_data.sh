@@ -37,29 +37,14 @@ curl -L -o /tmp/kubectl "https://dl.k8s.io/release/${KUBECTL_VERSION}/bin/linux/
 chmod +x /tmp/kubectl
 mv /tmp/kubectl /usr/local/bin/kubectl
 
-# -------------------------------
-# Install kops (use fixed version to avoid GitHub API rate-limit)
-# -------------------------------
-KOPS_VERSION="1.27.0"
-curl -L -o /tmp/kops "https://github.com/kubernetes/kops/releases/download/v${KOPS_VERSION}/kops-linux-amd64"
-chmod +x /tmp/kops
-mv /tmp/kops /usr/local/bin/kops
-
-echo "=== Installed Versions ==="
-/usr/local/bin/aws --version
-/usr/bin/git --version
-/usr/local/bin/terraform version
-/usr/local/bin/kubectl version --client
-/usr/local/bin/kops version
-
 
 # Clone the repository (replace with your actual repo URL)
-GIT_REPO_URL="https://github.com/joyboy2701/KOPS_FOLDER.git"
+GIT_REPO_URL="https://github.com/joyboy2701/migration_implementation_on_k3s.git"
 CLONE_DIR="/home/ec2-user/"
 
 echo "=== Cloning Git Repository ==="
-git clone "$GIT_REPO_URL" "$CLONE_DIR/KOPS_FOLDER"
-cd /home/ec2-user/KOPS_FOLDER/kops-setup
+git clone "$GIT_REPO_URL" "$CLONE_DIR/K3s"
+cd /home/ec2-user/K3s/k3s_setup
 
 # Initialize Terraform
 echo "=== Initializing Terraform ==="

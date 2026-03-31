@@ -8,13 +8,7 @@
       "Resource": "*"
     },
     {
-      "Sid": "S3FullAccessForKOPS",
-      "Effect": "Allow",
-      "Action": "s3:*",
-      "Resource": "*"
-    },
-    {
-      "Sid": "IAMFullAccessForKOPS",
+      "Sid": "IAMFullAccess",
       "Effect": "Allow",
       "Action": [
         "iam:*"
@@ -68,25 +62,8 @@
       ],
       "Resource": "*"
     },
-     {
-      "Sid": "SQS",
-      "Effect": "Allow",
-      "Action": [
-        "sqs:*"
-      ],
-      "Resource": "*"
-    },
     {
-      "Sid": "EventBridgeKOPSAccess",
-      "Effect": "Allow",
-      "Action": [
-        "events:*"
-      ],
-      "Resource": "*"
-    },
-    
-    {
-      "Sid": "CloudWatchLogsKOPSAccess",
+      "Sid": "CloudWatchLogsAccess",
       "Effect": "Allow",
       "Action": [
         "logs:CreateLogGroup",

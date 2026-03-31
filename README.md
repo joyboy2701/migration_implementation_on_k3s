@@ -163,9 +163,9 @@ app.example.com → AWS Load Balancer → Ingress NGINX → Service → Pod
 ---
 
 # ⚙️ Deployment
-
+cd network
 terraform init
-terraform plan -var-file="config/dev.tfvars"
+terraform plan -var-file="config/dev.tfvars"s
 terraform apply -var-file="config/dev.tfvars"
 
 ---

@@ -84,11 +84,8 @@ Key principles:
 │   │   │   ├── userdata
 │   │   │   │   ├── master.sh
 │   │   │   │   └── worker.sh
-│   │   │   └── variables.tf
-│   │   └── vpc
-│   │       ├── main.tf
-│   │       ├── outputs.tf
 │   │       └── variables.tf
+│   │  
 │   ├── outputs.tf
 │   ├── provider.tf
 │   ├── README.md
